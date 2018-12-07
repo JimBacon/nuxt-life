@@ -1,32 +1,25 @@
 <template>
-  <div class="game">
-    <div
+  <div
+    v-if="game.length"
+    class="game">
+    <row
       v-for="(row, rowIdx) in game"
-      :key="rowIdx"
-      class="game-row">
-      <cell
-        v-for="(col, colIdx) in row"
-        :key="rowIdx * numCols + colIdx"
-        :alive="col"
-      />
-    </div>
+      :row="row"
+      :row-idx="rowIdx"
+      :key="rowIdx + 1"
+    />
     <p>This is generation {{ generation }}</p>
+    <p v-if="extinct">Too bad - you've gone extinct!!</p>
   </div>
 </template>
 
 <script>
-import Cell from '~/components/Cell.vue'
+import Row from '~/components/Row.vue'
 
 export default {
   name: 'Game',
   components: {
-    Cell
-  },
-  props: {
-    playing: {
-      type: Boolean,
-      default: false
-    }
+    Row
   },
   data: function() {
     return {
@@ -36,7 +29,13 @@ export default {
       percentInitPop: this.$store.state.settings.initPop,
       interval: 1000,
       intervalID: null,
-      generation: 0
+      generation: 0,
+      extinct: false
+    }
+  },
+  computed: {
+    playing: function() {
+      return this.$store.state.playing
     }
   },
   watch: {
@@ -48,6 +47,11 @@ export default {
         }, this.interval)
       } else {
         clearInterval(this.intervalID)
+      }
+    },
+    extinct: function(val) {
+      if (val === true) {
+        this.$store.commit('setPlaying', false)
       }
     }
   },
@@ -67,7 +71,7 @@ export default {
       for (let rowIdx = 0; rowIdx < this.numRows; rowIdx++) {
         row = []
         for (let colIdx = 0; colIdx < this.numCols; colIdx++) {
-          row.push(100 * Math.random() < this.percentInitPop ? true : false)
+          row.push(100 * Math.random() < this.percentInitPop)
         }
         game.push(row)
       }
@@ -82,6 +86,7 @@ export default {
      * Any dead cell with exactly three live neighbors becomes a live cell.
      */
     generate: function() {
+      let extinct = true
       let nextGen = []
       let row = []
       let prevRowIdx
@@ -99,7 +104,6 @@ export default {
           prevColIdx = colIdx === 0 ? this.numCols - 1 : colIdx - 1
           nextColIdx = colIdx === this.numCols - 1 ? 0 : colIdx + 1
           numLiveNeighbours =
-            0 +
             (this.game[prevRowIdx][prevColIdx] ? 1 : 0) +
             (this.game[prevRowIdx][colIdx] ? 1 : 0) +
             (this.game[prevRowIdx][nextColIdx] ? 1 : 0) +
@@ -113,12 +117,14 @@ export default {
               row.push(false)
             } else if (numLiveNeighbours < 4) {
               row.push(true)
+              extinct = false
             } else {
               row.push(false)
             }
           } else {
             if (numLiveNeighbours === 3) {
               row.push(true)
+              extinct = false
             } else {
               row.push(false)
             }
@@ -126,6 +132,7 @@ export default {
         }
         nextGen.push(row)
       }
+      this.extinct = extinct
       return nextGen
     }
   }
