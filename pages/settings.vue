@@ -4,6 +4,7 @@
       <h1 class="md-title">Nuxt Life</h1>
       <div class="md-toolbar-row">
         <md-button
+          data-cy="back"
           to="/"
           class="md-icon-button">
           <md-icon>arrow-back</md-icon>
@@ -16,6 +17,7 @@
         <label>Rows</label>
         <md-input
           :value="rows"
+          data-cy="rows"
           @change="setRows"
         />
       </md-field>
@@ -23,6 +25,7 @@
         <label>Columns</label>
         <md-input
           :value="cols"
+          data-cy="cols"
           @change="setCols"
         />
       </md-field>
@@ -30,6 +33,7 @@
         <label>Initial population</label>
         <md-input
           :value="initPop"
+          data-cy="init-pop"
           @change="setInitPop"
         />
       </md-field>

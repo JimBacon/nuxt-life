@@ -1,5 +1,5 @@
 <template>
-  <div
+  <form
     v-if="game.length"
     class="game">
     <row
@@ -10,7 +10,7 @@
     />
     <p>This is generation {{ generation }}</p>
     <p v-if="extinct">Too bad - you've gone extinct!!</p>
-  </div>
+  </form>
 </template>
 
 <script>

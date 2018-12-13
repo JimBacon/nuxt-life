@@ -69,7 +69,7 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-      // Build sourve maps for debugging from WebStorm.
+      // Build source maps for debugging from WebStorm.
       if (ctx.isDev && ctx.isClient) {
         config.devtool = '#source-map'
       }

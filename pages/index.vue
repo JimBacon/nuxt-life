@@ -3,8 +3,9 @@
     <md-app-toolbar class="md-primary">
       <h1 class="md-title">Nuxt Life</h1>
       <div class="md-toolbar-row">
-        <play-button />
+        <play-button data-cy="play"/>
         <md-button
+          data-cy="settings"
           to="/settings"
           class="md-raised">
           Settings
@@ -16,7 +17,7 @@
       <p>Here is the game of life.</p>
       <p v-if="playing">I am now playing.</p>
       <p v-else>I am not playing.</p>
-      <game />
+      <game data-cy="game"/>
     </md-app-content>
   </md-app>
 </template>
