@@ -9,7 +9,11 @@
       :key="rowIdx + 1"
     />
     <p>This is generation {{ generation }}</p>
-    <p v-if="extinct">Too bad - you've gone extinct!!</p>
+    <p
+      v-if="extinct"
+      data-test="extinct" >
+      Too bad - you've gone extinct!!
+    </p>
   </form>
 </template>
 
